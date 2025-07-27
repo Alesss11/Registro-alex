@@ -1,58 +1,58 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { User, Briefcase, Shield } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, Briefcase, Shield } from "lucide-react";
 
 export default function UserSelectionPage() {
-  const router = useRouter()
-  const [selectedUser, setSelectedUser] = useState<string | null>(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const router = useRouter();
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Verificar autenticación
-    const authToken = localStorage.getItem("auth-token")
-    const authTimestamp = localStorage.getItem("auth-timestamp")
+    const authToken = localStorage.getItem("auth-token");
+    const authTimestamp = localStorage.getItem("auth-timestamp");
 
     if (authToken === "authenticated-raquel19" && authTimestamp) {
       // Verificar que no haya expirado (7 días)
-      const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
-      const isExpired = Date.now() - Number.parseInt(authTimestamp) > sevenDaysInMs
+      const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+      const isExpired = Date.now() - Number.parseInt(authTimestamp) > sevenDaysInMs;
 
       if (!isExpired) {
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
       } else {
         // Token expirado, limpiar y redirigir
-        localStorage.removeItem("auth-token")
-        localStorage.removeItem("auth-timestamp")
-        router.push("/login")
-        return
+        localStorage.removeItem("auth-token");
+        localStorage.removeItem("auth-timestamp");
+        router.push("/login");
+        return;
       }
     } else {
       // No autenticado, redirigir al login
-      router.push("/login")
-      return
+      router.push("/login");
+      return;
     }
 
-    setLoading(false)
-  }, [router])
+    setLoading(false);
+  }, [router]);
 
   const handleLogin = (userName: string) => {
-    localStorage.setItem("currentUser", userName)
-    localStorage.setItem("userId", userName === "Alex" ? "1" : "2")
-    router.push("/dashboard")
-  }
+    localStorage.setItem("currentUser", userName);
+    localStorage.setItem("userId", userName === "Alex" ? "1" : "2");
+    router.push("/dashboard");
+  };
 
   const handleLogout = () => {
-    localStorage.removeItem("auth-token")
-    localStorage.removeItem("auth-timestamp")
-    localStorage.removeItem("currentUser")
-    localStorage.removeItem("userId")
-    router.push("/login")
-  }
+    localStorage.removeItem("auth-token");
+    localStorage.removeItem("auth-timestamp");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("userId");
+    router.push("/login");
+  };
 
   if (loading) {
     return (
@@ -62,11 +62,11 @@ export default function UserSelectionPage() {
           <p className="mt-4 text-gray-600">Verificando acceso...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!isAuthenticated) {
-    return null // Se redirigirá al login
+    return null; // Se redirigirá al login
   }
 
   return (
@@ -121,5 +121,5 @@ export default function UserSelectionPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
